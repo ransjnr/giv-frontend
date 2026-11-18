@@ -1,0 +1,43 @@
+{
+  "name": "giv-admin",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Ability Connect GIV admin: the dashboard where the KNUST Gender Inclusion and Vulnerability Office manages student registrations and support requests. Built by the Responsible AI Lab.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5174 --strictPort",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --port 4174 --strictPort",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@fontsource/poppins": "^5.3.0",
+    "@hookform/resolvers": "^7.0.7",
+    "@tanstack/react-query": "^5.108.0",
+    "@tanstack/react-table": "^8.21.3",
+    "class-variance-authority": "^0.7.1",
+    "cmdk": "^1.1.1",
+    "cn": "^0.5.2",
+    "lucide-react": "^1.75.0",
+    "radix-ui": "^1.8.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-hook-form": "^7.92.0",
+    "react-router": "^8.5.1",
+    "recharts": "^3.8.0",
+    "shadcn": "^4.23.0",
+    "sonner": "^2.0.8",
+    "tw-animate-css": "^1.4.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8"
+  }
+}
