@@ -138,6 +138,9 @@
   html {
     @apply font-sans;
     color-scheme: light;
+    /* 17px base instead of 16px. Everything is sized in rem, so text, spacing and controls
+       grow together. A percentage (not px) keeps the browser's own text-size setting working. */
+    font-size: 106.25%;
   }
   html.dark {
     color-scheme: dark;

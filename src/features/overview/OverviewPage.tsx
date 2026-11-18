@@ -10,7 +10,15 @@ import {
   RefreshCwIcon,
   SparklesIcon,
 } from 'lucide-react';
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
@@ -106,7 +114,9 @@ function StatCards({ stats }: { stats: AdminStats }) {
       label: 'Overdue requests',
       value: stats.requests.overdue,
       icon: AlertTriangleIcon,
-      note: stats.requests.dueThisWeek ? `${stats.requests.dueThisWeek} more due within 7 days` : 'Nothing else due this week',
+      note: stats.requests.dueThisWeek
+        ? `${stats.requests.dueThisWeek} more due within 7 days`
+        : 'Nothing else due this week',
       to: '/requests?status=active&sort=neededBy&dir=asc',
       linkLabel: 'See requests by due date',
       alert: stats.requests.overdue > 0,
@@ -135,7 +145,10 @@ function StatCards({ stats }: { stats: AdminStats }) {
           </CardHeader>
           <CardFooter className="flex-col items-start gap-2 text-sm">
             <span className="text-muted-foreground">{c.note}</span>
-            <Link to={c.to} className="inline-flex items-center gap-1 font-medium text-primary underline-offset-4 hover:underline">
+            <Link
+              to={c.to}
+              className="inline-flex items-center gap-1 font-medium text-primary underline-offset-4 hover:underline"
+            >
               {c.linkLabel} <ArrowRightIcon aria-hidden className="size-4" />
             </Link>
           </CardFooter>
@@ -196,7 +209,11 @@ function AttentionCard({ stats, className }: { stats: AdminStats; className?: st
 const pipelineConfig = { count: { label: 'Registrations', color: 'var(--chart-1)' } } satisfies ChartConfig;
 
 function PipelineCard({ stats, className }: { stats: AdminStats; className?: string }) {
-  const data = REGISTRATION_FLOW.map((s) => ({ stage: registrationStatus[s].label, status: s, count: stats.registrations[s] }));
+  const data = REGISTRATION_FLOW.map((s) => ({
+    stage: registrationStatus[s].label,
+    status: s,
+    count: stats.registrations[s],
+  }));
   return (
     <Card className={className}>
       <CardHeader>
@@ -204,25 +221,34 @@ function PipelineCard({ stats, className }: { stats: AdminStats; className?: str
         <CardDescription>{plural(stats.registrations.total, 'registration')} sent to GIV so far.</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={pipelineConfig} className="aspect-auto h-56 w-full" aria-hidden>
-          <BarChart data={data} layout="vertical" margin={{ left: 8, right: 40 }} accessibilityLayer={false}>
-            <CartesianGrid horizontal={false} />
-            <YAxis dataKey="stage" type="category" tickLine={false} axisLine={false} width={110} />
-            <XAxis type="number" hide allowDecimals={false} />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Bar dataKey="count" fill="var(--color-count)" radius={6}>
-              <LabelList dataKey="count" position="right" className="fill-foreground" fontSize={12} />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
-        {/* The same numbers as text, for screen readers and anyone who prefers a list. */}
-        <ul className="sr-only">
-          {data.map((d) => (
-            <li key={d.status}>
-              {d.stage}: {d.count}
-            </li>
-          ))}
-        </ul>
+        {stats.registrations.total === 0 ? (
+          <EmptyState
+            title="No registrations yet"
+            description="When students send their registration, it appears here."
+          />
+        ) : (
+          <>
+            <ChartContainer config={pipelineConfig} className="aspect-auto h-56 w-full" aria-hidden>
+              <BarChart data={data} layout="vertical" margin={{ left: 8, right: 40 }} accessibilityLayer={false}>
+                <CartesianGrid horizontal={false} />
+                <YAxis dataKey="stage" type="category" tickLine={false} axisLine={false} width={110} />
+                <XAxis type="number" hide allowDecimals={false} />
+                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                <Bar dataKey="count" fill="var(--color-count)" radius={6}>
+                  <LabelList dataKey="count" position="right" className="fill-foreground" fontSize={12} />
+                </Bar>
+              </BarChart>
+            </ChartContainer>
+            {/* The same numbers as text, for screen readers and anyone who prefers a list. */}
+            <ul className="sr-only">
+              {data.map((d) => (
+                <li key={d.status}>
+                  {d.stage}: {d.count}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </CardContent>
       <CardFooter>
         <Button asChild variant="outline" size="sm">
@@ -239,7 +265,13 @@ function UrgencyCard({ stats, className }: { stats: AdminStats; className?: stri
   const u = stats.requests.activeByUrgency;
   const total = u.urgent + u.soon + u.normal;
   const rows = [
-    { key: 'urgent', label: 'Urgent', hint: 'In the next day or two', value: u.urgent, bar: 'bg-red-600 dark:bg-red-400' },
+    {
+      key: 'urgent',
+      label: 'Urgent',
+      hint: 'In the next day or two',
+      value: u.urgent,
+      bar: 'bg-red-600 dark:bg-red-400',
+    },
     { key: 'soon', label: 'Soon', hint: 'Within a week', value: u.soon, bar: 'bg-orange-500' },
     { key: 'normal', label: 'No rush', hint: 'In the next few weeks', value: u.normal, bar: 'bg-primary' },
   ] as const;
@@ -265,7 +297,10 @@ function UrgencyCard({ stats, className }: { stats: AdminStats; className?: stri
                     <span className="font-semibold tabular-nums">{r.value}</span>
                   </div>
                   <div className="h-2 overflow-hidden rounded-full bg-muted" aria-hidden>
-                    <div className={cn('h-full rounded-full', r.bar)} style={{ width: `${(r.value / total) * 100}%` }} />
+                    <div
+                      className={cn('h-full rounded-full', r.bar)}
+                      style={{ width: `${(r.value / total) * 100}%` }}
+                    />
                   </div>
                 </Link>
               </li>
@@ -300,7 +335,10 @@ function RecentCard({ items, className }: { items: ActivityItem[]; className?: s
               const to = a.requestId ? `/requests/${a.requestId}` : `/registrations/${a.studentId}`;
               return (
                 <li key={i} className="relative">
-                  <span aria-hidden className="absolute top-1.5 -left-[25px] size-2.5 rounded-full border-2 border-background bg-primary" />
+                  <span
+                    aria-hidden
+                    className="absolute top-1.5 -left-[25px] size-2.5 rounded-full border-2 border-background bg-primary"
+                  />
                   <p className="text-sm">
                     <Link to={to} className="font-medium underline-offset-4 hover:underline">
                       {a.studentName}
